@@ -25,5 +25,12 @@ namespace ApiEmpleadosOAuth.Repositories
             return this.context.Empleados
                 .SingleOrDefault(x => x.IdEmpleado == idempleado);
         }
+
+        public Empleado ExisteEmpleado(String apellido, int idempleado)
+        {
+            return this.context.Empleados
+                .SingleOrDefault(x => x.Apellido == apellido
+                && x.IdEmpleado == idempleado);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using ApiEmpleadosOAuth.Data;
+using ApiEmpleadosOAuth.Helpers;
 using ApiEmpleadosOAuth.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace ApiEmpleadosOAuth
             String cadena =
                 this.Configuration.GetConnectionString("cadenahospital");
             services.AddTransient<RepositoryEmpleados>();
+            services.AddTransient<HelperToken>();
             services.AddDbContext<EmpleadosContext>(options
                 => options.UseSqlServer(cadena));
             //SWAGGER
@@ -45,10 +47,15 @@ namespace ApiEmpleadosOAuth
                             Description = "Ejemplo de seguridad OAuth Token"
                         });
                 });
+
+            HelperToken helper = new HelperToken(Configuration);
+            //AÑADIMOS AUTHENTICATION CON LAS OPCIONES DEL HELPER
+            services.AddAuthentication(helper.GetAuthOptions())
+                .AddJwtBearer(helper.GetJwtBearerOptions());
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+       
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -73,6 +80,7 @@ namespace ApiEmpleadosOAuth
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
