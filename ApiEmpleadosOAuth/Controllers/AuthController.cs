@@ -4,10 +4,12 @@ using ApiEmpleadosOAuth.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ApiEmpleadosOAuth.Controllers
@@ -45,12 +47,22 @@ namespace ApiEmpleadosOAuth.Controllers
             }
             else
             {
+                //EL USUARIO O LO QUE DESEEMOS SE ALMACENA DENTRO
+                //DEL TOKEN MEDIANTE Claim
+                //UN CLAIM PERMITE ALMACENAR DATOS POR KEY, VALUE
+                //NECESITAMOS ALMACENAR EL OBJETO EMPLEADO EN EL TOKEN
+                String empleadojson = JsonConvert.SerializeObject(empleado);
+                Claim[] claims = new[] {
+                    new Claim("UserData", empleadojson)
+                };
+
                 //NECESITAMOS GENERAR UN TOKEN QUE LLEVARA
                 //INFORMACION DE NUESTRO API (ISSUER)
                 //EL TIEMPO DE DURACION O LAS CREDENCIALES
                 JwtSecurityToken token = new JwtSecurityToken(
                     issuer: this.helpertoken.Issuer,
                     audience: this.helpertoken.Audience,
+                    claims: claims,
                     expires: DateTime.UtcNow.AddMinutes(10),
                     notBefore: DateTime.UtcNow,
                     signingCredentials: 
