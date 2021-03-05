@@ -1,11 +1,15 @@
+using ApiEmpleadosOAuth.Data;
+using ApiEmpleadosOAuth.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +26,25 @@ namespace ApiEmpleadosOAuth
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            String cadena =
+                this.Configuration.GetConnectionString("cadenahospital");
+            services.AddTransient<RepositoryEmpleados>();
+            services.AddDbContext<EmpleadosContext>(options
+                => options.UseSqlServer(cadena));
+            //SWAGGER
+            services.AddSwaggerGen(
+                options =>
+                {
+                    options.SwaggerDoc(name: "v1"
+                        , new OpenApiInfo
+                        {
+                            Title = "Api Empleados Seguridad OAuth"
+                            ,Version = "v1",
+                            Description = "Ejemplo de seguridad OAuth Token"
+                        });
+                });
             services.AddControllers();
         }
 
@@ -35,6 +55,19 @@ namespace ApiEmpleadosOAuth
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            //UI INDICA DONDE VA A VISUALIZAR EL USUARIO LA DOCUMENTACION
+            //GENERADA POR SWAGGER EN NUESTRO SERVIDOR
+            app.UseSwaggerUI(
+                c =>
+                {
+                    //DEBEMOS CONFIGURAR LA URL DEL SERVIDOR
+                    //PARA LA DOCUMENTACION
+                    c.SwaggerEndpoint(
+                        url: "/swagger/v1/swagger.json"
+                        , name: "Api v1");
+                    c.RoutePrefix = "";
+                });
 
             app.UseHttpsRedirection();
 
