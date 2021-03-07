@@ -1,6 +1,5 @@
-using ApiEmpleadosOAuth.Data;
-using ApiEmpleadosOAuth.Helpers;
-using ApiEmpleadosOAuth.Repositories;
+using ApiEmpleadosLogicApps.Data;
+using ApiEmpleadosLogicApps.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiEmpleadosOAuth
+namespace ApiEmpleadosLogicApps
 {
     public class Startup
     {
@@ -32,26 +31,20 @@ namespace ApiEmpleadosOAuth
             String cadena =
                 this.Configuration.GetConnectionString("cadenahospital");
             services.AddTransient<RepositoryEmpleados>();
-            services.AddTransient<HelperToken>();
             services.AddDbContext<EmpleadosContext>(options
                 => options.UseSqlServer(cadena));
             //SWAGGER
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc(name: "v1"
+                    options.SwaggerDoc(name: "v2"
                         , new OpenApiInfo
                         {
-                            Title = "Api Empleados Seguridad OAuth"
-                            ,Version = "v1",
-                            Description = "Ejemplo de seguridad OAuth Token"
+                            Title = "Api Empleados Logic App"
+                            ,Version = "2.0",
+                            Description = "Ejemplo de Logic Apps"
                         });
                 });
-
-            HelperToken helper = new HelperToken(Configuration);
-            //AÑADIMOS AUTHENTICATION CON LAS OPCIONES DEL HELPER
-            services.AddAuthentication(helper.GetAuthOptions())
-                .AddJwtBearer(helper.GetJwtBearerOptions());
             services.AddControllers();
         }
 
@@ -71,17 +64,14 @@ namespace ApiEmpleadosOAuth
                     //DEBEMOS CONFIGURAR LA URL DEL SERVIDOR
                     //PARA LA DOCUMENTACION
                     c.SwaggerEndpoint(
-                        url: "/swagger/v1/swagger.json"
-                        , name: "Api v1");
+                        url: "/swagger/v2/swagger.json"
+                        , name: "Api v2");
                     c.RoutePrefix = "";
                 });
 
             app.UseHttpsRedirection();
-
-            app.UseRouting();
-
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {

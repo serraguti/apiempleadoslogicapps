@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiEmpleadosOAuth.Models
+namespace ApiEmpleadosLogicApps.Models
 {
     [Table("EMP")]
     public class Empleado
