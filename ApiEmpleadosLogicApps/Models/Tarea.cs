@@ -17,8 +17,8 @@ namespace ApiEmpleadosLogicApps.Models
         public String Nombre { get; set; }
         [Column("DESCRIPCION")]
         public String Descripcion { get; set; }
-        [Column("FECHA")]
-        public DateTime Fecha { get; set; }
+        //[Column("FECHA")]
+        //public DateTime Fecha { get; set; }
         [Column("IDEMPLEADO")]
         public int IdEmpleado { get; set; }
     }

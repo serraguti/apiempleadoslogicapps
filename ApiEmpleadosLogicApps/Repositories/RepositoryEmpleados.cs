@@ -62,7 +62,9 @@ namespace ApiEmpleadosLogicApps.Repositories
 
         public List<Tarea> GetTareasEmpleado(int idempleado)
         {
-            return this.context.Tareas.Where(x => x.IdEmpleado == idempleado).ToList();
+            return this.context.Tareas.Where(x => x.IdEmpleado == idempleado)
+                .OrderByDescending(x => x.IdTarea)
+                .ToList();
         }
 
         public Tarea FindTarea(int idtarea)
@@ -82,7 +84,7 @@ namespace ApiEmpleadosLogicApps.Repositories
             t.IdTarea = this.GetMaxtarea();
             t.Nombre = nombre;
             t.Descripcion = descripcion;
-            t.Fecha = DateTime.Now;
+            //t.Fecha = DateTime.Now;
             t.IdEmpleado = idempleado;
             this.context.Tareas.Add(t);
             this.context.SaveChanges();
