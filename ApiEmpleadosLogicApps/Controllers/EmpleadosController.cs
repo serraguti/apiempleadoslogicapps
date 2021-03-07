@@ -62,9 +62,15 @@ namespace ApiEmpleadosLogicApps.Controllers
 
         [HttpGet]
         [Route("[action]/{idempleado}/tareas")]
-        public List<Tarea> TareasEmpleado(int idempleado)
+        public ActionResult<object> TareasEmpleado(int idempleado)
         {
-            return this.repo.GetTareasEmpleado(idempleado);
+            //var list = _userRepository.GetAll(); // <-- if this is not (yet) an Array or a List, then force single evaluation by adding .ToArray() or .ToList()
+            var model = new
+            {
+                value = this.repo.GetTareasEmpleado(idempleado)
+            };
+            //return Ok(model);
+            return Ok(model);
         }
 
         [HttpGet]

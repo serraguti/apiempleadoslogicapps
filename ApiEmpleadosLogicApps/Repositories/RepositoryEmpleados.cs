@@ -64,7 +64,7 @@ namespace ApiEmpleadosLogicApps.Repositories
         {
             return this.context.Tareas.Where(x => x.IdEmpleado == idempleado)
                 .OrderByDescending(x => x.IdTarea)
-                .ToList();
+                .ToList(); ;
         }
 
         public Tarea FindTarea(int idtarea)
