@@ -21,30 +21,30 @@ namespace ApiEmpleadosLogicApps.Controllers
             this.repo = repo;
         }
 
-        [HttpGet]
-        public ActionResult<List<Empleado>> GetEmpleados()
-        {
-            return this.repo.GetEmpleados();
-        }
+        //[HttpGet]
+        //public ActionResult<List<Empleado>> GetEmpleados()
+        //{
+        //    return this.repo.GetEmpleados();
+        //}
 
-        [HttpGet("{id}")]
-        public ActionResult<Empleado> BuscarEmpleado(int id)
-        {
-            return this.repo.BuscarEmpleado(id);
-        }
+        //[HttpGet("{id}")]
+        //public ActionResult<Empleado> BuscarEmpleado(int id)
+        //{
+        //    return this.repo.BuscarEmpleado(id);
+        //}
 
-        [HttpPut]
-        [Route("[action]/{idempleado}/{incremento}")]
-        public void IncrementarSalario(int idempleado, int incremento)
-        {
-            this.repo.IncrementarSalario(idempleado, incremento);
-        }
+        //[HttpPut]
+        //[Route("[action]/{idempleado}/{incremento}")]
+        //public void IncrementarSalario(int idempleado, int incremento)
+        //{
+        //    this.repo.IncrementarSalario(idempleado, incremento);
+        //}
 
-        [HttpDelete("{id}")]
-        public void EliminarEmpleado(int id)
-        {
-            this.repo.EliminarEmpleado(id);
-        }
+        //[HttpDelete("{id}")]
+        //public void EliminarEmpleado(int id)
+        //{
+        //    this.repo.EliminarEmpleado(id);
+        //}
 
         [HttpPost]
         [Route("[action]")]
@@ -64,12 +64,10 @@ namespace ApiEmpleadosLogicApps.Controllers
         [Route("[action]/{idempleado}/tareas")]
         public ActionResult<object> TareasEmpleado(int idempleado)
         {
-            //var list = _userRepository.GetAll(); // <-- if this is not (yet) an Array or a List, then force single evaluation by adding .ToArray() or .ToList()
             var model = new
             {
                 value = this.repo.GetTareasEmpleado(idempleado)
             };
-            //return Ok(model);
             return Ok(model);
         }
 

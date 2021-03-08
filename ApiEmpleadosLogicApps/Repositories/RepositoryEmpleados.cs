@@ -26,21 +26,6 @@ namespace ApiEmpleadosLogicApps.Repositories
                 .SingleOrDefault(x => x.IdEmpleado == idempleado);
         }
 
-        public Empleado ExisteEmpleado(String apellido, int idempleado)
-        {
-            return this.context.Empleados
-                .SingleOrDefault(x => x.Apellido == apellido
-                && x.IdEmpleado == idempleado);
-        }
-
-        public List<Empleado> GetSubordinados(int idempleado)
-        {
-            var consulta = from datos in context.Empleados
-                           where datos.Director == idempleado
-                           select datos;
-            return consulta.ToList();
-        }
-
         public void EliminarEmpleado(int idempleado)
         {
             Empleado empleado = this.BuscarEmpleado(idempleado);
@@ -62,9 +47,11 @@ namespace ApiEmpleadosLogicApps.Repositories
 
         public List<Tarea> GetTareasEmpleado(int idempleado)
         {
-            return this.context.Tareas.Where(x => x.IdEmpleado == idempleado)
+            //BUSCAMOS LAS TAREAS QUE TODAVIA NO SE HAN PROCESADO
+            return this.context.Tareas.Where(x => x.IdEmpleado == idempleado
+            && x.Estado == "NEW")
                 .OrderByDescending(x => x.IdTarea)
-                .ToList(); ;
+                .ToList(); 
         }
 
         public Tarea FindTarea(int idtarea)
@@ -84,8 +71,8 @@ namespace ApiEmpleadosLogicApps.Repositories
             t.IdTarea = this.GetMaxtarea();
             t.Nombre = nombre;
             t.Descripcion = descripcion;
-            //t.Fecha = DateTime.Now;
             t.IdEmpleado = idempleado;
+            t.Estado = "NEW";
             this.context.Tareas.Add(t);
             this.context.SaveChanges();
         }

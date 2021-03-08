@@ -40,9 +40,9 @@ namespace ApiEmpleadosLogicApps
                     options.SwaggerDoc(name: "v2"
                         , new OpenApiInfo
                         {
-                            Title = "Api Empleados Logic App"
+                            Title = "Api Tareas Logic App"
                             ,Version = "2.0",
-                            Description = "Ejemplo de Logic Apps"
+                            Description = "Ejemplo de Logic Apps Api"
                         });
                 });
             services.AddControllers();
